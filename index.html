@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Explaining Screenings and Exams to Parents</title>
+<style>
+:root{
+  --ink:#1d2a2e; --muted:#5b6b70; --bg:#fbf8f3; --card:#ffffff; --line:#e6e0d6;
+  --teal:#0f5f63; --teal-2:#147b80; --teal-soft:#e3f1f1;
+  --coral:#d9603a; --coral-soft:#fcebe4; --sun:#f0b23a; --sun-soft:#fdf3dc;
+  --plum:#6b4c8a; --plum-soft:#efe8f6; --leaf:#3f8a4f; --leaf-soft:#e6f3e8;
+  --radius:14px; --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 14px rgba(29,42,46,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;font-size:16px}
+a{color:var(--teal-2)}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+header.hero{background:linear-gradient(135deg,#0f5f63 0%,#147b80 60%,#1d8f86 100%);color:#fff;padding:28px 0 0}
+.hero h1{margin:0 0 6px;font-size:clamp(1.5rem,3.2vw,2.25rem);font-weight:700;letter-spacing:-.01em}
+.hero p.lede{margin:0 0 18px;max-width:760px;opacity:.95}
+.hero-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.lang{display:inline-flex;background:rgba(255,255,255,.15);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;color:#fff;padding:6px 14px;border-radius:999px;font-weight:600;font-size:.9rem}
+.lang button[aria-pressed="true"]{background:#fff;color:var(--teal)}
+.lang-label{font-size:.85rem;opacity:.9;margin-right:8px}
+.reviewed{font-size:.82rem;opacity:.85}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin}
+nav.tabs button{border:0;background:transparent;color:#e7f4f3;padding:12px 16px;border-radius:12px 12px 0 0;font-weight:600;white-space:nowrap;font-size:.95rem}
+nav.tabs button[aria-selected="true"]{background:var(--bg);color:var(--teal)}
+nav.tabs button:focus-visible,.btn:focus-visible,.card:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+main{padding:24px 0 48px}
+section.view{display:none}
+section.view.active{display:block}
+.notice{display:flex;gap:12px;background:var(--sun-soft);border:1px solid #f1d593;border-radius:var(--radius);padding:12px 16px;margin-bottom:20px;font-size:.93rem}
+.notice strong{color:#7a5300}
+.notice .ico{flex:none;width:22px;height:22px;margin-top:2px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
+.search{flex:1 1 260px;position:relative}
+.search input{width:100%;padding:11px 14px 11px 40px;border:1px solid var(--line);border-radius:999px;background:#fff;font:inherit}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:#fff;color:var(--ink);padding:7px 13px;border-radius:999px;font-size:.88rem;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;text-align:left;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;transition:transform .15s,box-shadow .15s;color:inherit}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(29,42,46,.12)}
+.card .top{display:flex;align-items:center;gap:12px}
+.badge-ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none}
+.badge-ico svg{width:26px;height:26px}
+.card h3{margin:0;font-size:1.06rem;line-height:1.3}
+.card p{margin:0;color:var(--muted);font-size:.92rem}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.tag{font-size:.75rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--teal-soft);color:var(--teal);text-transform:uppercase;letter-spacing:.03em}
+.tag.when{background:var(--coral-soft);color:#9b3b1c}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+/* detail */
+.detail{display:none}
+.detail.open{display:block}
+.back{border:0;background:none;color:var(--teal);font-weight:700;padding:6px 0;margin-bottom:10px;display:inline-flex;align-items:center;gap:6px}
+.dhead{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);margin-bottom:16px}
+.dhead .left{display:flex;align-items:center;gap:14px}
+.dhead h2{margin:0;font-size:1.45rem}
+.dhead .sub{color:var(--muted);font-size:.93rem;margin-top:2px}
+.btn{border:1px solid var(--teal);background:var(--teal);color:#fff;padding:9px 16px;border-radius:10px;font-weight:600;font-size:.92rem;display:inline-flex;gap:8px;align-items:center}
+.btn.ghost{background:#fff;color:var(--teal)}
+.printgrp{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.printgrp .plbl{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--teal);font-size:.92rem}
+.printgrp .plbl svg{width:18px;height:18px}
+.btn svg{width:18px;height:18px}
+.dgrid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px}
+@media (max-width:860px){.dgrid{grid-template-columns:1fr}}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);margin-bottom:16px}
+.panel h3{margin:0 0 10px;font-size:1.05rem;color:var(--teal)}
+.panel h4{margin:14px 0 6px;font-size:.95rem}
+.panel ul{margin:0;padding-left:20px}
+.panel li{margin:4px 0}
+.panel p{margin:0 0 8px}
+.subtabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:-4px 0 14px}
+.subtabs button{border:0;background:none;padding:9px 12px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;font-size:.92rem}
+.subtabs button[aria-selected="true"]{color:var(--teal);border-bottom-color:var(--teal)}
+.say{background:var(--leaf-soft);border-left:5px solid var(--leaf);border-radius:10px;padding:14px 16px;font-size:1.02rem}
+.say .lbl{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--leaf);display:block;margin-bottom:6px}
+.qa{border-top:1px dashed var(--line);padding:10px 0}
+.qa:first-child{border-top:0}
+.qa .q{font-weight:700}
+.req{background:var(--plum-soft);border-radius:10px;padding:12px 14px;font-size:.93rem}
+.req .lbl{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--plum);display:block;margin-bottom:4px}
+.ages{background:var(--teal-soft);border-radius:10px;padding:12px 14px;font-size:.93rem;margin-top:10px}
+.ages .lbl{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--teal);display:block;margin-bottom:4px}
+.result{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;padding:8px 0;border-top:1px solid var(--line)}
+.result:first-of-type{border-top:0}
+.dot{width:12px;height:12px;border-radius:50%;margin-top:6px}
+table.mini{border-collapse:collapse;margin:8px 0 4px;font-size:.88rem;width:100%;max-width:440px}
+table.mini th,table.mini td{border:1px solid var(--line);padding:5px 9px;text-align:left;vertical-align:top}
+table.mini th{background:var(--teal-soft);color:var(--teal);font-weight:700}
+.tips li::marker{color:var(--coral)}
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:6px}
+/* matrix */
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.88rem;margin:6px 0 14px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.mtx-wrap{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+table.mtx{border-collapse:collapse;width:100%;min-width:760px;font-size:.9rem}
+.mtx th,.mtx td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:center}
+.mtx thead th{background:var(--teal);color:#fff;font-weight:600;position:sticky;top:0}
+.mtx th.row{text-align:left;font-weight:600;background:#fff;position:sticky;left:0;min-width:210px}
+.mtx th.row button{border:0;background:none;color:var(--teal-2);font-weight:700;padding:0;text-align:left;text-decoration:underline;text-underline-offset:3px}
+.mtx tr.grp th{background:#f4efe6;color:var(--muted);text-transform:uppercase;font-size:.74rem;letter-spacing:.06em;text-align:left;padding:7px 10px}
+.mk{display:inline-block;width:18px;height:18px;border-radius:50%}
+.mk.U{background:var(--teal)}
+.mk.R{border:2.5px solid var(--coral);background:#fff}
+.mk.UR{background:linear-gradient(90deg,var(--teal) 50%,var(--coral-soft) 50%);border:2px solid var(--coral)}
+.footnote{font-size:.85rem;color:var(--muted);margin-top:10px}
+/* timeline */
+.tl{position:relative;margin-left:12px;padding-left:28px;border-left:3px solid var(--teal-soft)}
+.tl-item{position:relative;margin-bottom:18px}
+.tl-item::before{content:"";position:absolute;left:-38px;top:18px;width:16px;height:16px;border-radius:50%;background:var(--teal);border:3px solid var(--bg)}
+.tl-item .when{display:inline-block;font-weight:800;color:var(--teal);font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.tl-item h3{margin:0 0 6px;font-size:1.08rem;color:var(--ink)}
+.cite{font-size:.8rem;color:var(--plum);font-weight:600}
+.linkchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.linkchips button{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:4px 11px;font-size:.82rem;font-weight:600;color:var(--teal)}
+/* families */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.swap{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:.92rem}
+.swap div{padding:9px 12px;border-top:1px solid var(--line)}
+.swap .h{font-weight:800;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;border-top:0}
+.swap .no{background:#fdf0ec}
+.swap .yes{background:#eef7ef}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s;position:relative;padding:4px 0 10px 42px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:2px;width:28px;height:28px;border-radius:50%;background:var(--coral);color:#fff;font-weight:800;display:grid;place-items:center;font-size:.9rem}
+/* quiz */
+.quiz-q{font-weight:700;font-size:1.05rem;margin-bottom:12px}
+.opts{display:grid;gap:8px}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left}
+.opt:hover{border-color:var(--teal-2)}
+.opt.right{border-color:var(--leaf);background:var(--leaf-soft)}
+.opt.wrong{border-color:var(--coral);background:var(--coral-soft)}
+.explain{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--teal-soft);display:none}
+.progress{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin-bottom:16px}
+.progress div{height:100%;background:var(--teal);width:0;transition:width .3s}
+.src-list{columns:2 320px;column-gap:28px;padding-left:18px}
+.src-list li{break-inside:avoid;margin-bottom:8px;font-size:.93rem}
+footer{border-top:1px solid var(--line);padding:18px 0 30px;color:var(--muted);font-size:.85rem}
+#print-area{display:none}
+@media print{
+  body{background:#fff}
+  header.hero,main,footer{display:none !important}
+  #print-area{display:block;font-size:12.5pt;color:#000;padding:0 8px}
+  #print-area h1{font-size:20pt;margin:0 0 4px;color:#0f5f63}
+  #print-area h2{font-size:13pt;margin:16px 0 6px;color:#0f5f63}
+  #print-area .say{border-left:5px solid #3f8a4f;background:#f2f8f3;padding:10px 14px;border-radius:6px}
+  #print-area .small{font-size:9.5pt;color:#444;margin-top:18px}
+  #print-area .hsub{color:#555}
+  #print-area h2{break-after:avoid;page-break-after:avoid}
+  #print-area .fill,#print-area .say,#print-area p,#print-area .pres{break-inside:avoid}
+  #print-area ul{margin:0;padding-left:20px}
+  #print-area .pres{margin:0 0 6px}
+  #print-area p{margin:0 0 6px}
+  #print-area .fill{border:1.5px solid #0f5f63;border-radius:6px;padding:8px 12px;margin-top:10px}
+  #print-area .fill div{display:flex;gap:8px;align-items:flex-end;margin:6px 0}
+  #print-area .fill span{font-weight:600;white-space:nowrap}
+  #print-area .fill i{flex:1;border-bottom:1px solid #777;height:1.2em}
+  #print-area .handout + .handout{page-break-before:always;break-before:page}
+  @page{margin:0.6in}
+}
+@media (max-width:560px){.wrap{padding:0 16px}.dhead .actions{width:100%}.swap{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-row">
+      <div>
+        <h1>Explaining Screenings and Exams to Parents</h1>
+        <p class="lede">A quick reference for Family Services and health staff: what each screening or exam is, why it matters, how it's done, what results mean, and plain-language words you can use with families in English or Spanish.</p>
+      </div>
+    </div>
+    <div class="hero-row">
+      <div><span class="lang-label">Parent scripts:</span>
+        <span class="lang" role="group" aria-label="Parent script language">
+          <button type="button" data-lang="en" aria-pressed="true">English</button>
+          <button type="button" data-lang="es" aria-pressed="false">Español</button>
+        </span>
+      </div>
+      <div class="reviewed">Content last reviewed: October 22, 2026</div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" aria-selected="true" data-view="topics">Screenings &amp; Exams</button>
+      <button role="tab" aria-selected="false" data-view="ages">By Age</button>
+      <button role="tab" aria-selected="false" data-view="hs">Head Start Timelines</button>
+      <button role="tab" aria-selected="false" data-view="talk">Talking with Families</button>
+      <button role="tab" aria-selected="false" data-view="quiz">Check Yourself</button>
+      <button role="tab" aria-selected="false" data-view="sources">Sources</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- TOPICS -->
+  <section class="view active" id="view-topics">
+    <div id="topic-list">
+      <div class="notice" role="note">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#b07a00" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16.5v.5"/></svg>
+        <div><strong>This page is for staff guidance, not medical advice.</strong> Screenings tell us whether a child needs a closer look; only a licensed health or dental professional can diagnose. Always go by the child's provider and your state's current EPSDT, immunization, and child care licensing rules.</div>
+      </div>
+      <div class="toolbar">
+        <label class="search"><span class="visually-hidden" style="position:absolute;left:-9999px">Search topics</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="Search: iron, lead, glasses, fluoride, TB…" autocomplete="off">
+        </label>
+        <div class="chips" role="group" aria-label="Filter by type" id="chips"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="empty" hidden>No topics match. Try a different word.</div>
+    </div>
+    <div class="detail" id="detail"></div>
+  </section>
+
+  <!-- AGES -->
+  <section class="view" id="view-ages">
+    <div class="panel">
+      <h3>What's recommended at each well-child visit (ages 9 months to 5 years)</h3>
+      <p>Based on the Bright Futures/American Academy of Pediatrics <em>Recommendations for Preventive Pediatric Health Care</em> (the "periodicity schedule"), which most state Medicaid EPSDT programs follow. Select a row name to open that topic. Your state's EPSDT schedule may add requirements.</p>
+      <div class="legend">
+        <span><i class="mk U"></i> Done for every child</span>
+        <span><i class="mk R"></i> Risk assessment; test if risk is found</span>
+        <span><i class="mk UR"></i> Universal for Medicaid/high-risk areas, otherwise risk-based</span>
+        <span>— Not scheduled at this visit</span>
+      </div>
+      <div class="mtx-wrap"><table class="mtx" id="mtx"></table></div>
+      <p class="footnote">If a child missed something on the schedule, the provider should bring it up to date at the next visit. Vision: instrument-based screening may also be used at 12 and 24 months; visual acuity charts are used at 4 and 5 years and for cooperative 3-year-olds. Lead: Medicaid requires blood lead tests at 12 and 24 months, and a catch-up test between 24 and 72 months if never tested. Fluoride varnish: every 3–6 months once teeth appear, through age 5.</p>
+    </div>
+  </section>
+
+  <!-- HEAD START TIMELINES -->
+  <section class="view" id="view-hs">
+    <div class="notice" role="note">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#b07a00" stroke-width="2"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17v.5"/></svg>
+      <div><strong>Policy watch.</strong> On August 7, 2026, the Office of Head Start proposed a rule (<em>Reducing Federal Burden for Head Start Programs</em>) that would replace the Performance Standards and drop many of the screening timelines below. Public comments closed October 6, 2026. <strong>Until a final rule is published and takes effect, the current standards below still apply.</strong></div>
+    </div>
+    <div class="panel">
+      <h3>Current Head Start Program Performance Standards: health screening timelines</h3>
+      <p>Counted in calendar days from the child's first day attending (or first home visit for home-based). Programs that operate 90 days or less have 30 days to complete the 45- and 90-day items.</p>
+      <div class="tl" id="tl"></div>
+    </div>
+  </section>
+
+  <!-- TALKING WITH FAMILIES -->
+  <section class="view" id="view-talk">
+    <div class="two">
+      <div class="panel">
+        <h3>A simple flow for any screening conversation</h3>
+        <ol class="steps">
+          <li><strong>Start with the child.</strong> Share something positive you've noticed. Families listen better when they know you see their child's strengths.</li>
+          <li><strong>Say what it is in one sentence.</strong> "A vision screening is a quick check to see if your child's eyes need a closer look."</li>
+          <li><strong>Say why it matters for learning and growing.</strong> Connect it to things parents care about: talking, playing, getting ready for kindergarten.</li>
+          <li><strong>Say what to expect.</strong> How long, whether it hurts, what the parent can do to help their child feel safe.</li>
+          <li><strong>Explain results honestly and calmly.</strong> A screening is not a diagnosis. "Needs a second look" is not "something is wrong."</li>
+          <li><strong>Check understanding.</strong> Ask the parent to tell you, in their own words, what happens next (teach-back).</li>
+          <li><strong>Offer concrete help.</strong> Finding a provider, insurance, making the appointment, transportation, interpretation, reminders.</li>
+        </ol>
+      </div>
+      <div class="panel">
+        <h3>Words that help</h3>
+        <div class="swap">
+          <div class="h no">Instead of…</div><div class="h yes">Try…</div>
+          <div class="no">"Your child failed the hearing test."</div><div class="yes">"We'd like to check again, and maybe have the doctor take a closer look at your child's ears."</div>
+          <div class="no">"Your child is obese / too skinny."</div><div class="yes">"Let's look at how your child is growing over time and talk about what's working at home."</div>
+          <div class="no">"The result was abnormal."</div><div class="yes">"The number was outside the usual range, so the next step is…"</div>
+          <div class="no">"You have to get this done by Friday."</div><div class="yes">"This helps us make sure nothing gets in the way of learning. What would make it easier to get the appointment?"</div>
+          <div class="no">"Lead poisoning"</div><div class="yes">"Lead in the blood" (then explain what level and what's next)</div>
+          <div class="no">"Developmental delay"</div><div class="yes">"Some areas where a specialist could give extra support"</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Respect, language, and culture</h3>
+        <ul class="tips">
+          <li>Offer communication in the family's preferred language. Use trained interpreters for results and referrals, not the child or siblings.</li>
+          <li>Ask what the family already knows and believes about the screening. Some families may have had painful experiences with clinics, blood draws, or immigration-related worries; listen first.</li>
+          <li>Home remedies and imported products can be important to families. Ask about them with curiosity, not judgment, especially for lead and nutrition.</li>
+          <li>Share results privately. Child health information is protected; follow your program's confidentiality and consent procedures.</li>
+          <li>Parents decide. Explain the benefits clearly, document the conversation, and keep the door open if a family declines.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>After the conversation</h3>
+        <ul class="tips">
+          <li>Document the contact, the result or referral, and the agreed next step in C-FIT according to Centro procedure.</li>
+          <li>Set a reminder to follow up. Head Start requires tracking referrals until services are received or a plan is in place.</li>
+          <li>Loop in the Health &amp; Nutrition team for anything urgent: very high lead, signs of tooth infection, a child who seems to be in pain, or a family that can't get care.</li>
+          <li>Celebrate completions with the family. A finished dental treatment or a new pair of glasses is a big deal.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="view" id="view-quiz">
+    <div class="panel" id="quiz" style="max-width:760px"></div>
+  </section>
+
+  <!-- SOURCES -->
+  <section class="view" id="view-sources">
+    <div class="panel">
+      <h3>Sources and further reading</h3>
+      <p>Content reflects guidance available as of October 22, 2026. Federal immunization recommendations and Head Start regulations were both in flux in 2026; check the links below before relying on specific schedules.</p>
+      <ul class="src-list" id="src"></ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Prepared for Centro de la Familia Health &amp; Nutrition Services. For staff guidance only; it does not replace advice from a child's health care or dental provider. Head Start is a program of the U.S. Department of Health and Human Services.</div>
+</footer>
+
+<div id="print-area" aria-hidden="true"></div>
+
+<script>
+/* ---------- ICONS ---------- */
+const I = {
+  drop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3c3 4.5 6 7.6 6 11a6 6 0 0 1-12 0c0-3.4 3-6.5 6-11z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/></svg>',
+  tooth:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 3.5c-2.2 0-3.5 1.8-3.5 4 0 2.5 1.2 4 1.8 6.5.6 2.6.9 6.5 2.7 6.5 1.6 0 1.6-4.5 4-4.5s2.4 4.5 4 4.5c1.8 0 2.1-3.9 2.7-6.5.6-2.5 1.8-4 1.8-6.5 0-2.2-1.3-4-3.5-4-2 0-3 1.2-5 1.2S9 3.5 7 3.5z"/></svg>',
+  ruler:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="2.5" width="8" height="19" rx="1.5"/><path d="M8 6.5h3M8 10h4.5M8 13.5h3M8 17h4.5"/></svg>',
+  ear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9a6 6 0 1 1 12 0c0 3-2.5 4-3.5 6s-1 5-4 5a3 3 0 0 1-3-3"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-1.5 2-1.5 3.5"/></svg>',
+  eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.5 4 5.5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10v-6l-8-3z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>',
+  house:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11 12 3.5 21 11"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></svg>',
+  steth:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 3v5a4 4 0 0 0 8 0V3"/><path d="M9 12v2a5 5 0 0 0 10 0v-2"/><circle cx="19" cy="10" r="2"/></svg>',
+  apple:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 7.5c-1.5-1.2-5-1.5-6.5 1.2-1.6 3 0 9 2.5 11 1.3 1 2.5.3 4 .3s2.7.7 4-.3c2.5-2 4.1-8 2.5-11C17 6 13.5 6.3 12 7.5z"/><path d="M12 7.5c0-2 1-3.5 3-4"/></svg>',
+  lungs:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3v8"/><path d="M12 11c-1 1-2 1.5-3 1.5"/><path d="M12 11c1 1 2 1.5 3 1.5"/><path d="M8.5 6.5C5 7 3 12 3 16.5c0 2.5 2 3.5 4 3 2.5-.6 2.5-3 2.5-5V8c0-1-.4-1.6-1-1.5z"/><path d="M15.5 6.5c3.5.5 5.5 5.5 5.5 10 0 2.5-2 3.5-4 3-2.5-.6-2.5-3-2.5-5V8c0-1 .4-1.6 1-1.5z"/></svg>',
+  puzzle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 8h3.5a2 2 0 1 1 4 0H15v3.5a2 2 0 1 1 0 4V19h-3.5a2 2 0 1 0-4 0H4v-3.5a2 2 0 1 0 0-4V8z"/></svg>',
+  print:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg>'
+};
+const C = { teal:['#e3f1f1','#0f5f63'], coral:['#fcebe4','#b8462a'], sun:['#fdf3dc','#9a6a00'], plum:['#efe8f6','#6b4c8a'], leaf:['#e6f3e8','#2f7340'] };
+
+/* ---------- TOPIC CONTENT ---------- */
+const TOPICS = [
+{
+ id:'anemia', name:'Anemia Screening (Hemoglobin / Hematocrit)', icon:'drop', color:'coral', types:['Lab test'], when:'90 days',
+ keywords:'iron blood hgb hct finger prick red blood cells milk wic',
+ blurb:'A few drops of blood show whether a child has enough iron-rich red blood cells.',
+ what:'A quick blood test. <strong>Hemoglobin</strong> is the part of red blood cells that carries oxygen; <strong>hematocrit</strong> is the share of the blood made up of red blood cells. Low results can mean anemia, which in young children is most often caused by not getting or absorbing enough iron.',
+ how:['A finger or heel prick collects a few drops of blood (sometimes it is part of a regular lab draw).','Many clinics have results in minutes.','It takes about a minute; a parent can hold and comfort the child.'],
+ why:'Iron is needed for brain development, energy, attention, and learning. Iron deficiency can affect development even before anemia shows up, and it often has no visible signs. Toddlers who drink a lot of cow\'s milk, picky eaters, and babies born early are at higher risk. Head Start also uses hemoglobin/hematocrit results when identifying each child\'s nutrition needs.',
+ results:[
+  ['teal','Anemia cut-offs (CDC criteria, at sea level)','A result <em>below</em> these numbers is considered low:<table class="mini"><tr><th>Age</th><th>Hemoglobin (Hgb)</th><th>Hematocrit (Hct)</th></tr><tr><td>1 to under 2 years<br><small>(also used for 6–12 months)</small></td><td>11.0 g/dL</td><td>32.9%</td></tr><tr><td>2 to under 5 years</td><td>11.1 g/dL</td><td>33.0%</td></tr></table>'],
+  ['leaf','At or above the cut-off (after altitude adjustment)','Within the expected range. Keep offering iron-rich foods (meat, beans, iron-fortified cereal) with foods high in vitamin C. No follow-up needed beyond the regular schedule.'],
+  ['sun','Below the cut-off (low)','The provider may recheck, suggest iron-rich foods, advise limiting milk to the recommended amount, or prescribe iron. Offer a WIC referral if eligible and share the result with the nutrition team. Track the follow-up until the provider says the level is back in range.'],
+  ['coral','Well below the cut-off (about 10 g/dL Hgb / 30% Hct or lower)','WIC treats these levels as high-risk. Make sure the family has a prompt appointment with the child\'s provider and notify the Health &amp; Nutrition team. Very low results need medical attention right away.'],
+  ['plum','Adjust for altitude, which matters in our states','At higher elevations everyone\'s hemoglobin runs higher, so the cut-off goes <em>up</em>. Add the adjustment for the child\'s home elevation to the cut-off above:<table class="mini"><tr><th>Home elevation</th><th>Add to Hgb</th><th>Add to Hct</th></tr><tr><td>Under 3,000 ft</td><td>none</td><td>none</td></tr><tr><td>3,000–3,999 ft</td><td>+0.2</td><td>+0.5</td></tr><tr><td>4,000–4,999 ft</td><td>+0.3</td><td>+1.0</td></tr><tr><td>5,000–5,999 ft</td><td>+0.5</td><td>+1.5</td></tr><tr><td>6,000–6,999 ft</td><td>+0.7</td><td>+2.0</td></tr><tr><td>7,000–7,999 ft</td><td>+1.0</td><td>+3.0</td></tr><tr><td>8,000–8,999 ft</td><td>+1.3</td><td>+4.0</td></tr></table><strong>Example:</strong> a 3-year-old living at about 4,500 ft (much of the Wasatch Front) is low if Hgb is below <strong>11.4</strong> (11.1 + 0.3) or Hct is below <strong>34.0%</strong> (33.0 + 1.0). In Denver (about 5,300 ft) the same child is low below <strong>11.6</strong> Hgb or <strong>34.5%</strong> Hct.'],
+  ['plum','Always go by the provider','Labs and WIC may use slightly different cut-offs and adjust automatically. If the provider\'s note says "normal" or "low," that interpretation is what counts for the record. Use this table to understand results and know when to ask, not to diagnose.']
+ ],
+ hs:'Part of the EPSDT well-child schedule used for the 90-day up-to-date determination, <span class="cite">45 CFR §1302.42(b)(1)</span>. Results inform each child\'s nutrition needs, <span class="cite">§1302.42(b)(4)</span>.',
+ ages:'Universal screening at the 12-month visit. Risk assessment at 4, 15, 18, 24, and 30 months and yearly from age 3, with testing if risk is found.',
+ tips:['Ask for the actual result and date from the well-child record; "normal" alone is hard to verify.','If the child was screened before enrolling, it can still count; check the date against the state EPSDT schedule.','Pair low results with a nutrition conversation, not blame. Many families have been told "more milk is always better."'],
+ en:'At your child\'s checkup, the doctor checks a few drops of blood from a finger poke to see if your child has enough iron in their blood. Iron helps children grow, have energy, and learn. It only takes a minute, and you can hold your child. If the result is low, the doctor will explain simple next steps, like iron-rich foods or vitamin drops, and we can help too.',
+ es:'En el chequeo de su hijo(a), el doctor revisa unas gotitas de sangre de un piquete en el dedo para ver si tiene suficiente hierro en la sangre. El hierro ayuda a los niños a crecer, tener energía y aprender. Solo toma un minuto y usted puede cargar a su niño(a). Si el resultado sale bajo, el doctor le explicará los siguientes pasos, como comidas con hierro o vitaminas en gotas, y nosotros también le podemos ayudar.',
+ faq:[
+  ['Will it hurt?','It is a quick pinch, like a small poke. Holding your child and staying calm helps a lot.','¿Le va a doler?','Es un piquete rápido. Cargar a su niño(a) y mantener la calma ayuda mucho.'],
+  ['My child eats a lot. Why test?','Low iron usually has no signs, and even children who eat well can be low, especially if they drink a lot of milk.','Mi niño(a) come mucho. ¿Por qué hacer la prueba?','La falta de hierro casi nunca se nota, y hasta los niños que comen bien pueden tener poco hierro, sobre todo si toman mucha leche.']
+ ]
+},
+{
+ id:'dental', name:'Dental Screening & Dental Exam', icon:'tooth', color:'teal', types:['Screening','Exam','Prevention'], when:'90 days',
+ keywords:'teeth oral health dentist cavities fluoride varnish decay dental home toothbrushing',
+ blurb:'A quick look at the teeth versus a full exam by a dentist, plus fluoride to prevent cavities.',
+ what:'A <strong>dental screening</strong> is a quick look in the mouth (for example, "lift the lip") by a trained person to spot obvious problems. It does not diagnose. A <strong>dental exam</strong> is done by a dentist, who checks teeth, gums, and bite, may clean the teeth or take X-rays if needed, and makes a treatment plan. <strong>Fluoride varnish</strong> is a quick, painted-on coating that helps prevent cavities.',
+ how:['Little ones are often examined "knee-to-knee," lying back on the parent\'s lap.','Fluoride varnish is brushed on in a minute or two. The dentist will give simple instructions about eating afterward.','First visits are short and mostly about getting comfortable and talking with the parent about preventing decay.'],
+ why:'Tooth decay is the most common chronic disease of childhood. Cavities hurt and can make it hard to eat, sleep, talk, pay attention, and learn. Baby teeth hold space for adult teeth, so infections and early tooth loss can cause problems later.',
+ results:[
+  ['leaf','No problems found','Keep regular checkups (often every 6 months, per the state dental schedule), brush twice a day with fluoride toothpaste, and get fluoride varnish as recommended.'],
+  ['sun','Treatment needed','Help the family schedule treatment, find a dentist who takes their insurance, and arrange transportation. Track until treatment is complete.'],
+  ['coral','Urgent','Pain, swelling of the face or gums, or a broken tooth with pain needs same-day dental care. Tell the Health team right away.']
+ ],
+ hs:'Within 90 days, obtain a determination of whether the child is up to date on the state EPSDT <em>dental</em> periodicity schedule, <span class="cite">§1302.42(b)(1)(i)</span>. Programs must facilitate preventive care including topical fluoride, and fluoride supplements where water lacks adequate fluoride, <span class="cite">§1302.42(c)(3)</span>; plus daily toothbrushing in class, <span class="cite">§1302.43</span>.',
+ ages:'First dental visit by age 1 (AAP, AAPD, ADA). Fluoride varnish every 3–6 months from the first tooth through age 5 (AAP, USPSTF). Dental home and risk check at every well-child visit.',
+ tips:['Utah stopped fluoridating public water in May 2025, so varnish and fluoride toothpaste matter even more for Utah families. Fluoride supplements require a prescription, which Utah pharmacists may also write; federal action in 2025 also restricted marketing of some children\'s ingestible fluoride products, so families should ask their dentist or doctor what\'s right for their child.','Ask for the dentist\'s written exam form, not only the parent\'s report, to document "up to date."','"Baby teeth fall out anyway" is a common belief. Explain that baby teeth hold space and that cavities can spread and hurt.'],
+ en:'Healthy teeth help your child eat, talk, sleep, and learn. A dental screening is a quick look to see if anything needs attention. The dental exam is with a dentist, who checks your child\'s teeth closely and may paint on fluoride to make teeth stronger. It doesn\'t hurt. If your child needs treatment, we can help you find a dentist and set up the appointment.',
+ es:'Los dientes sanos ayudan a su niño(a) a comer, hablar, dormir y aprender. La revisión dental es una mirada rápida para ver si algo necesita atención. El examen dental es con un dentista, que revisa los dientes con cuidado y puede ponerles fluoruro con un pincelito para hacerlos más fuertes. No duele. Si su niño(a) necesita tratamiento, le podemos ayudar a encontrar un dentista y hacer la cita.',
+ faq:[
+  ['Baby teeth fall out. Why fix them?','Baby teeth hold the space for adult teeth and help with eating and talking. Cavities in baby teeth can hurt, get infected, and spread.','Los dientes de leche se caen. ¿Por qué arreglarlos?','Los dientes de leche guardan el espacio para los dientes permanentes y ayudan a comer y hablar. Las caries pueden doler, infectarse y extenderse.'],
+  ['Is fluoride varnish safe?','Fluoride varnish uses a very small amount of fluoride and is recommended by pediatric and dental groups to prevent cavities. Your dentist or doctor can answer specific questions.','¿Es seguro el barniz de fluoruro?','El barniz usa una cantidad muy pequeña de fluoruro y lo recomiendan los grupos de pediatras y dentistas para prevenir caries. Su dentista o doctor puede contestar sus preguntas.']
+ ]
+},
+{
+ id:'growth', name:'Growth Assessment (Height, Weight, BMI)', icon:'ruler', color:'leaf', types:['Screening'], when:'Ongoing',
+ keywords:'height weight bmi growth chart percentile head circumference length obesity underweight measure',
+ blurb:'Measuring height and weight over time to see how a child is growing.',
+ what:'Measuring length or height, weight, and (until age 2) head size, then plotting them on growth charts. Under age 2, providers use WHO growth charts and weight-for-length; from age 2, CDC charts and BMI-for-age percentile.',
+ how:['Shoes and heavy clothes off; child stands straight (or lies down for length under age 2).','Measurements are plotted on a growth chart to compare with children of the same age and sex.','The trend over time matters more than one measurement.'],
+ why:'Growth is one of the best signs of overall health and nutrition. Changes in a child\'s growth pattern can be an early sign of a feeding, health, or nutrition concern that is easier to address early.',
+ results:[
+  ['leaf','Growing steadily along their curve','Keep up healthy routines: family meals, active play, sleep.'],
+  ['sun','Above or below the expected range, or a big change','The provider may check more often or ask about eating, sleep, and activity. Share with the nutrition team so meals and family support can be tailored.'],
+  ['plum','BMI categories (age 2+)','Under 5th percentile is underweight; 85th to under 95th is overweight; 95th and above is obesity. Use these terms only as the provider does, and talk with families about growth and habits rather than labels.']
+ ],
+ hs:'Height, weight, and growth information are part of the physical exam and are used to identify each child\'s nutrition needs, <span class="cite">§1302.42(b)(4)</span>. Ongoing observation to catch new concerns, <span class="cite">§1302.42(c)(2)</span>.',
+ ages:'Length/height and weight at every well-child visit. Head circumference through 24 months. Weight-for-length through 18 months; BMI from age 2.',
+ tips:['Measure in a private spot. Never compare children or comment on bodies in front of others.','Use accurate equipment and technique; one bad measurement can cause unnecessary worry.','Lead with the trend and the family\'s goals, not a number.'],
+ en:'We measure your child\'s height and weight to see how they are growing over time. Growth is one of the best signs that a child is healthy and getting good nutrition. It is quick and doesn\'t hurt. We look at the pattern over months, not just one number, and we\'ll share what we see with you.',
+ es:'Medimos la estatura y el peso de su niño(a) para ver cómo va creciendo con el tiempo. El crecimiento es una de las mejores señales de que un niño está sano y bien alimentado. Es rápido y no duele. Nos fijamos en el patrón durante varios meses, no solo en un número, y le compartiremos lo que veamos.',
+ faq:[
+  ['The chart says my child is "high." Is that bad?','Every child grows differently. The doctor looks at whether your child follows a steady pattern over time. We can talk about healthy habits that work for your family.','La gráfica dice que mi niño(a) está "alto". ¿Es malo?','Cada niño crece diferente. El doctor se fija si su niño(a) sigue un patrón estable. Podemos hablar de hábitos saludables que funcionen para su familia.'],
+  ['My child is small like me. Is that OK?','Family size matters. The doctor checks whether your child is growing steadily along their own curve.','Mi niño(a) es pequeño como yo. ¿Está bien?','El tamaño de la familia influye. El doctor revisa si su niño(a) está creciendo de forma estable en su propia curva.']
+ ]
+},
+{
+ id:'hearing', name:'Hearing Screening', icon:'ear', color:'plum', types:['Screening'], when:'45 days',
+ keywords:'ears oae audiometry audiologist ear infection fluid speech language hear',
+ blurb:'A quick, painless check of whether sound is getting through clearly.',
+ what:'A quick check to see whether a child may have hearing loss. It is not a full hearing test. If a child does not pass, the next step is a re-check and possibly a visit to the doctor or an audiologist (hearing specialist).',
+ how:['<strong>OAE (otoacoustic emissions):</strong> a soft tip is placed in the ear for a few seconds; it measures an "echo" from the inner ear. The child doesn\'t need to respond, so it works well for infants, toddlers, and children who can\'t do a listening game.','<strong>Pure-tone screening:</strong> for many children about 3 and older; the child wears headphones and plays a listening game, like dropping a block in a bucket when they hear a beep.','It takes a few minutes and does not hurt.'],
+ why:'Hearing is the foundation for speech, language, social skills, and learning. Even mild or temporary hearing loss, such as fluid from ear infections, can slow language development. Many children with hearing loss show no obvious signs.',
+ results:[
+  ['leaf','Pass','No further action now. Keep watching speech and language and report concerns.'],
+  ['sun','Did not pass / could not be screened','Rescreen within a few weeks. Common causes include ear fluid, wax, a cold, or a child who wasn\'t ready. If still not passing, refer to the child\'s doctor to check the ears, then to an audiologist if needed.'],
+  ['coral','Referred','Help with appointments and track until results are back. Share any accommodations with teachers.']
+ ],
+ hs:'Within 45 calendar days, obtain or perform an evidence-based hearing screening, <span class="cite">§1302.42(b)(2)</span>. Facilitate diagnostic testing and follow-up for abnormal results, <span class="cite">§1302.42(d)(1)</span>.',
+ ages:'Newborn hearing screen; risk assessment at well visits through age 3; screening with audiometry at ages 4 and 5.',
+ tips:['A "refer" result isn\'t a diagnosis. Never tell a parent their child is deaf or hard of hearing based on a screening.','Screen in the quietest room available, and not when the child is sick or upset.','Ask whether the child passed the newborn hearing screen; families may not know.'],
+ en:'A hearing screening is a quick, painless check to make sure sounds are getting through clearly. Good hearing helps children learn to talk, make friends, and learn. Your child may wear headphones and play a listening game, or a small soft tip goes in the ear for a few seconds. If your child needs a second check, it\'s often just from a cold or ear fluid, and we\'ll help with the next step.',
+ es:'La revisión del oído es una prueba rápida y sin dolor para asegurarnos de que su niño(a) escucha bien. Escuchar bien le ayuda a aprender a hablar, hacer amigos y aprender. Puede ponerse audífonos y jugar un juego de escuchar, o se le coloca una puntita suave en el oído por unos segundos. Si necesita otra revisión, muchas veces es solo por un resfriado o líquido en el oído, y le ayudaremos con el siguiente paso.',
+ faq:[
+  ['My child talks fine. Why check?','Some hearing loss is mild or only in one ear, and children work around it. Finding it early protects language and learning.','Mi niño(a) habla bien. ¿Por qué revisar?','Algunas pérdidas de audición son leves o en un solo oído, y los niños se adaptan. Detectarlo temprano protege el lenguaje y el aprendizaje.'],
+  ['What if my child doesn\'t pass?','We check again in a few weeks. If there\'s still a concern, the doctor looks in the ears and may send you to a hearing specialist.','¿Y si no pasa la prueba?','Volvemos a revisar en unas semanas. Si sigue la duda, el doctor revisa los oídos y tal vez le envíe con un especialista.']
+ ]
+},
+{
+ id:'vision', name:'Vision Screening', icon:'eye', color:'teal', types:['Screening'], when:'45 days',
+ keywords:'eyes glasses photoscreener lea hotv eye doctor amblyopia lazy eye optometrist',
+ blurb:'A quick check to find eye problems early, while they are easiest to treat.',
+ what:'A short check to find children who may need a full eye exam. It is not an eye exam and does not prescribe glasses. Children who don\'t pass are referred to an eye doctor (optometrist or ophthalmologist).',
+ how:['<strong>Instrument-based screening</strong> (a photoscreener): the child looks at a camera-like device for a few seconds. Works for toddlers and preschoolers; no reading needed.','<strong>Picture or letter charts</strong> (such as LEA Symbols or HOTV): usually for children about 3 and older, often with a matching card so they can point instead of naming.','No drops, no touching the eyes, no pain.'],
+ why:'Young children rarely complain about poor vision; they think everyone sees the way they do. Problems like a "lazy eye" (amblyopia), crossed eyes, or needing glasses can affect learning and are much easier to treat when caught early in childhood.',
+ results:[
+  ['leaf','Pass','Re-screen as scheduled. Watch for squinting, eye rubbing, head tilting, or one eye turning.'],
+  ['sun','Unable to screen','Try again another day; many young children need a second try.'],
+  ['coral','Refer','Help the family schedule a full eye exam and track the result. If glasses are prescribed, help the child wear them at school and home.']
+ ],
+ hs:'Within 45 calendar days, obtain or perform an evidence-based vision screening, <span class="cite">§1302.42(b)(2)</span>. Facilitate follow-up for abnormal results, <span class="cite">§1302.42(d)(1)</span>.',
+ ages:'Risk assessment at visits through 30 months; instrument-based screening may be used at 12 and 24 months. Screening at ages 3, 4, and 5 (visual acuity at 4 and 5, and for cooperative 3-year-olds).',
+ tips:['Use the evidence-based tools and procedures your program trained on; don\'t improvise.','Glasses get broken and lost; know your local resources for replacements.','A "pass" doesn\'t rule out every eye problem. Parent and teacher concerns always deserve a referral.'],
+ en:'A vision screening is a quick check to see if your child\'s eyes need a closer look. Young children usually can\'t tell us when they don\'t see well. Your child looks at a special camera or points to pictures on a chart. It doesn\'t hurt and there are no eye drops. If your child needs a full eye exam, we will help you find an eye doctor.',
+ es:'La revisión de la vista es una prueba rápida para ver si los ojos de su niño(a) necesitan una revisión más completa. Los niños pequeños casi nunca pueden decir que no ven bien. Su niño(a) mira una cámara especial o señala dibujos en una tabla. No duele y no usan gotas. Si necesita un examen completo de la vista, le ayudaremos a encontrar un doctor de los ojos.',
+ faq:[
+  ['Is this the same as an eye exam?','No. The screening finds children who need a full exam. Only an eye doctor can diagnose a problem or prescribe glasses.','¿Es lo mismo que un examen de la vista?','No. La revisión encuentra a los niños que necesitan un examen completo. Solo un doctor de los ojos puede diagnosticar o recetar lentes.'],
+  ['My child won\'t keep glasses on.','That\'s common at first. Short wearing times, praise, and a good fit help. Teachers can help too.','Mi niño(a) no quiere usar los lentes.','Es normal al principio. Ayuda empezar con ratitos, felicitarlo(a) y que le queden bien. Las maestras también pueden ayudar.']
+ ]
+},
+{
+ id:'immunizations', name:'Immunizations', icon:'shield', color:'sun', types:['Prevention'], when:'90 days',
+ keywords:'vaccines shots immunization record exemption measles mmr dtap flu hepatitis state requirement',
+ blurb:'Vaccines that protect children, and their classmates, from serious diseases.',
+ what:'Vaccines given at well-child visits on a recommended schedule to protect children from serious diseases. Child care and Head Start programs check immunization records to make sure children are protected and to meet state law.',
+ how:['Given as shots (and one oral vaccine for infants) during regular checkups.','Several vaccines may be given at one visit.','Mild soreness, fussiness, or a low fever for a day or two are the most common side effects.'],
+ why:'Vaccines protect children from diseases that can cause serious illness, hospital stays, or death, such as measles, whooping cough (pertussis), and Hib. When most children in a classroom are protected, babies and children who can\'t be vaccinated are protected too.',
+ results:[
+  ['leaf','Up to date','Keep the record on file and watch for upcoming doses.'],
+  ['sun','Behind schedule','Children can catch up. Help the family get an appointment with their provider or local health department. The Vaccines for Children program covers vaccines for eligible children.'],
+  ['plum','Exemption','Each state sets its own exemption rules and forms. Follow your state\'s child care immunization rules and Centro procedure; exemptions may affect attendance during an outbreak.']
+ ],
+ hs:'The 90-day up-to-date determination includes immunization recommendations issued by CDC, <span class="cite">§1302.42(b)(1)(i)</span>; state child care licensing rules also set required vaccines and exemptions.',
+ ages:'Vaccines are given at most well-child visits from birth through age 6, with a cluster at 4–6 years before kindergarten. The provider follows the current schedule.',
+ tips:['<strong>2026 status, stated neutrally for staff:</strong> CDC issued a revised childhood schedule in January 2026. A federal court stayed it on March 16, 2026, and CDC\'s posted schedule reverted to its earlier version; the government appealed, and further federal changes are possible. The American Academy of Pediatrics publishes its own 2026 schedule. For enrollment, rely on your state\'s current child care requirements and the child\'s provider.','Families may have heard conflicting news. Avoid debating; acknowledge the confusion and point them to their child\'s provider for vaccine decisions.','Check records against your state\'s requirement list, not memory. State lists differ (for example, which vaccines and how many doses are required for child care).'],
+ en:'Vaccines help protect your child and their classmates from serious diseases. Your child gets them at regular checkups. We keep a copy of your child\'s shot record because state child care rules require it. If your child is missing any, their doctor or the health department can help them catch up. If you have questions about a specific vaccine, your child\'s doctor is the best person to ask.',
+ es:'Las vacunas ayudan a proteger a su niño(a) y a sus compañeros de enfermedades graves. Se ponen en los chequeos regulares. Guardamos una copia de la cartilla de vacunas porque las reglas del estado para guarderías lo piden. Si le falta alguna, su doctor o el departamento de salud le pueden ayudar a ponerse al día. Si tiene preguntas sobre una vacuna en particular, el doctor de su niño(a) es la mejor persona para preguntar.',
+ faq:[
+  ['I heard the vaccine schedule changed. What should I do?','Federal recommendations have been changing and some changes are in court. Your child\'s doctor knows the current recommendations and your child\'s history, so they are the best person to talk with.','Escuché que cambió el calendario de vacunas. ¿Qué hago?','Las recomendaciones federales han estado cambiando y algunos cambios están en la corte. El doctor de su niño(a) conoce las recomendaciones actuales y la historia de su niño(a); es la mejor persona para hablar.'],
+  ['My child has a cold. Can they still get shots?','Usually yes for a mild cold, but the provider will decide at the visit.','Mi niño(a) tiene un resfriado. ¿Le pueden vacunar?','Por lo general sí, si es leve, pero el doctor decide en la cita.']
+ ]
+},
+{
+ id:'lead', name:'Lead Screening', icon:'house', color:'coral', types:['Lab test'], when:'90 days',
+ keywords:'lead blood paint old house spices candy pottery greta azarcon venous capillary 3.5 medicaid',
+ blurb:'A blood test to check for lead, which has no safe level for children.',
+ what:'A blood test that measures lead in a child\'s blood. Lead can harm a child\'s brain, behavior, and learning, often without any symptoms. There is no known safe blood lead level.',
+ how:['Usually a finger prick (capillary). A high result from a finger prick should be confirmed with a blood draw from a vein (venous), because skin contamination can cause false highs.','Some clinics have results the same day; others send to a lab.','Providers may also ask risk questions, such as about older housing and certain products.'],
+ why:'Young children put hands and objects in their mouths and absorb lead more easily than adults. Finding lead early lets families remove the source and protects development. Common sources include paint in homes built before 1978, soil, some imported spices, candies, ceramics, cosmetics, home remedies (such as greta or azarcón), and some jobs or hobbies that bring lead dust home.',
+ results:[
+  ['leaf','Below CDC\'s reference value (3.5 µg/dL)','Keep up prevention: wash hands and toys, wet-clean dust, and avoid known risky products.'],
+  ['sun','At or above 3.5 µg/dL','Confirm with a venous test if it was a finger prick. The provider will recheck on a set schedule and talk about finding sources and iron, calcium, and vitamin C in the diet. Local or state health departments may offer home investigations at higher levels.'],
+  ['coral','Very high','Very high levels need prompt medical follow-up. Notify the Health team right away.']
+ ],
+ hs:'Lead testing is part of the EPSDT schedule used for the 90-day determination, <span class="cite">§1302.42(b)(1)</span>. Programs must facilitate follow-up for elevated lead levels, <span class="cite">§1302.42(d)(1)</span>.',
+ ages:'All Medicaid-enrolled children must have blood lead tests at 12 and 24 months, plus a catch-up test between 24 and 72 months if never tested. A risk questionnaire does not meet the Medicaid requirement. Other children: risk assessment at well visits, with testing based on risk or local rules.',
+ tips:['Ask about sources with curiosity and respect. Many families use trusted products from home countries without knowing they may contain lead.','Make sure you know whether a result was capillary or venous before discussing next steps.','Children with elevated lead benefit from regular meals with iron and calcium; coordinate with the nutrition team.'],
+ en:'A lead test checks for lead in your child\'s blood. Lead can hurt how a child learns and behaves, and most children with lead don\'t look or act sick, so testing is the only way to know. It\'s usually a quick finger poke. If there is lead, the doctor will help you find where it might come from and how to lower it, and we will help too.',
+ es:'La prueba de plomo revisa si hay plomo en la sangre de su niño(a). El plomo puede afectar el aprendizaje y el comportamiento, y la mayoría de los niños con plomo no se ven enfermos, por eso la prueba es la única manera de saber. Por lo general es un piquete rápido en el dedo. Si sale plomo, el doctor le ayudará a encontrar de dónde puede venir y cómo bajarlo, y nosotros también le ayudaremos.',
+ faq:[
+  ['Our house is new. Why test?','Lead can come from soil, some imported spices, candies, pottery, remedies, or a family member\'s job, not just old paint.','Nuestra casa es nueva. ¿Por qué hacer la prueba?','El plomo puede venir de la tierra, algunas especias, dulces, ollas de barro, remedios caseros o el trabajo de un familiar, no solo de pintura vieja.'],
+  ['The finger test was high. Does my child have lead poisoning?','Not necessarily. A finger test can read high if there was lead on the skin. The doctor will do a blood draw from the arm to confirm.','La prueba del dedo salió alta. ¿Mi niño(a) tiene plomo?','No necesariamente. La prueba del dedo puede salir alta si había plomo en la piel. El doctor hará una prueba de sangre del brazo para confirmar.']
+ ]
+},
+{
+ id:'physical', name:'Physical Exam (Well-Child Checkup)', icon:'steth', color:'teal', types:['Exam'], when:'90 days',
+ keywords:'well child checkup epsdt physical doctor medical home blood pressure exam form insurance',
+ blurb:'A head-to-toe checkup with the child\'s regular health care provider.',
+ what:'A well-child visit with the child\'s regular doctor, nurse practitioner, or physician assistant. Under Medicaid\'s EPSDT benefit, it includes a health and development history, a head-to-toe physical exam, age-appropriate screenings and lab tests (such as anemia and lead), immunizations, and health guidance for the family.',
+ how:['The provider checks growth, heart, lungs, ears, eyes, mouth, skin, belly, muscles and joints, and development.','Blood pressure is checked every year from age 3 (earlier if the child has certain risks).','Bring the shot record and any Head Start forms; ask the provider to complete or sign the program\'s physical exam form.'],
+ why:'Regular checkups catch problems early and keep a child up to date on screenings and vaccines. Having a "medical home," a regular provider who knows the child, means better care than relying on urgent care or the emergency room.',
+ results:[
+  ['leaf','Up to date, no concerns','File the exam documentation and note the next visit due date.'],
+  ['sun','Concerns or follow-up needed','Help with referrals and specialist appointments; ask about an individualized health plan if the child has a condition affecting the program day (asthma, allergies, seizures, diabetes, etc.).'],
+  ['plum','No regular provider or insurance','Help the family find a medical home and apply for coverage (Medicaid/CHIP or other options).']
+ ],
+ hs:'Within 30 days, determine whether the child has an ongoing source of health care and insurance, and help if not, <span class="cite">§1302.42(a)</span>. Within 90 days, determine whether the child is up to date on EPSDT well-child care, <span class="cite">§1302.42(b)(1)</span>. Help families keep up with the schedule, <span class="cite">§1302.42(c)(1)</span>.',
+ ages:'Well-child visits at 9, 12, 15, 18, 24, and 30 months, then every year from age 3.',
+ tips:['"Up to date" means current for the child\'s age on the state EPSDT schedule, not just "had a physical sometime."','Check that the form includes the date, provider signature, and all required screenings; missing pieces are the most common reason a record doesn\'t count.','If a visit is coming up anyway, send the family with a checklist of what Head Start needs so it\'s all done in one trip.'],
+ en:'A well-child checkup is a regular visit with your child\'s doctor, even when your child isn\'t sick. The doctor checks growth, development, eyes, ears, heart, and more, and makes sure screenings and vaccines are current. Please bring your child\'s shot record and this form. If you don\'t have a regular doctor or insurance, we can help you find one.',
+ es:'El chequeo del niño sano es una visita regular con el doctor de su niño(a), aunque no esté enfermo. El doctor revisa el crecimiento, el desarrollo, los ojos, los oídos, el corazón y más, y se asegura de que las pruebas y vacunas estén al día. Por favor lleve la cartilla de vacunas y esta forma. Si no tiene doctor o seguro médico, le podemos ayudar a encontrar uno.',
+ faq:[
+  ['My child is healthy. Why go?','Checkups find problems before they cause trouble and keep screenings and vaccines up to date.','Mi niño(a) está sano. ¿Para qué ir?','Los chequeos encuentran problemas antes de que causen molestias y mantienen al día las pruebas y vacunas.'],
+  ['Can urgent care do it?','Urgent care is for sudden illness. A regular provider who knows your child gives the best ongoing care.','¿Lo puede hacer una clínica de urgencias?','Las urgencias son para enfermedades repentinas. Un doctor regular que conoce a su niño(a) da el mejor cuidado continuo.']
+ ]
+},
+{
+ id:'nutrition', name:'Nutrition Assessment', icon:'apple', color:'leaf', types:['Screening'], when:'Ongoing',
+ keywords:'food allergy diet eating habits cacfp meal modification medical statement milk substitute wic snap picky eater',
+ blurb:'Putting together health information and family eating patterns to meet each child\'s nutrition needs.',
+ what:'Not a single test: it brings together the child\'s health records (height, weight, hemoglobin/hematocrit), the family\'s eating patterns, special diets, food allergies, and any feeding or development concerns, so the program can plan meals, education, and referrals that fit the child.',
+ how:['A conversation or questionnaire with the family about what the child eats and drinks, routines, and concerns.','Review of growth and anemia results from the physical exam.','Allergy and special-diet information from the child\'s health care provider.'],
+ why:'Good nutrition supports growth, brain development, and readiness to learn. Knowing a child\'s needs early keeps them safe at mealtimes (especially with allergies) and connects families to supports such as WIC and SNAP.',
+ results:[
+  ['leaf','No special needs','Offer program meals and family-style dining; share nutrition tips that fit the family\'s culture and budget.'],
+  ['sun','Food allergy or medical diet','Under USDA CACFP rules, meal changes for a disability need a medical statement signed by a state-licensed health care professional. Share with the kitchen and classroom; post safely per procedure.'],
+  ['plum','Preference (not medical)','A parent may request a non-dairy milk substitute in writing if it is nutritionally equivalent to milk; other preference changes are accommodated where possible. Ask the Health &amp; Nutrition team.']
+ ],
+ hs:'Identify each child\'s nutritional health needs using health records, development or mental health concerns, family and staff concerns, special diets, food allergies, and community nutrition issues, <span class="cite">§1302.42(b)(4)</span>. Meal service requirements, <span class="cite">§1302.44</span>.',
+ ages:'At enrollment and whenever health information or family concerns change.',
+ tips:['Ask open questions: "What does a typical day of eating look like?" rather than "Does your child eat vegetables?"','Never guess about allergies; get the provider\'s documentation and the family\'s emergency plan.','Culturally familiar foods are healthy foods. Build on what families already do well.'],
+ en:'We\'d like to learn about how your child eats at home, any allergies or special diets, and any concerns you have. This helps us plan safe, healthy meals at school and share ideas that fit your family. If your child needs a special diet for a health reason, the doctor will need to fill out a form so our kitchen can make the right changes.',
+ es:'Nos gustaría saber cómo come su niño(a) en casa, si tiene alergias o una dieta especial, y cualquier preocupación que tenga. Esto nos ayuda a planear comidas sanas y seguras en la escuela y compartir ideas que funcionen para su familia. Si su niño(a) necesita una dieta especial por salud, el doctor tendrá que llenar una forma para que la cocina haga los cambios correctos.',
+ faq:[
+  ['My child is a picky eater. Is that a problem?','Picky eating is common. We can share ideas, and we\'ll let you know if growth or other results suggest a closer look.','Mi niño(a) no quiere comer de todo. ¿Es un problema?','Es muy común. Le podemos dar ideas, y le avisaremos si el crecimiento u otros resultados indican que hay que revisar más.'],
+  ['Why do you need a doctor\'s form for an allergy?','It keeps your child safe and makes sure the kitchen makes exactly the right changes.','¿Por qué necesitan una forma del doctor para la alergia?','Protege a su niño(a) y asegura que la cocina haga exactamente los cambios correctos.']
+ ]
+},
+{
+ id:'tb', name:'Tuberculosis (TB) Risk & Testing', icon:'lungs', color:'plum', types:['Lab test','Screening'], when:'90 days',
+ keywords:'tb tuberculin skin test tst ppd igra quantiferon latent bcg chest x-ray travel',
+ blurb:'Questions about TB exposure, with a skin or blood test only if there is a risk.',
+ what:'Most children are first asked <strong>risk questions</strong> (for example, about contact with someone who has TB, being born in or traveling to a country where TB is common, or close contact with people at higher risk). A <strong>test</strong> is done only if a risk is found or if local or state rules require it.',
+ how:['<strong>Tuberculin skin test (TST/PPD):</strong> a tiny injection under the skin of the forearm. The family <em>must return in 48–72 hours</em> to have it read.','<strong>Blood test (IGRA):</strong> one blood draw, no return visit; often preferred for children age 2 and older, and for children who received the BCG vaccine.'],
+ why:'Young children who are infected with TB are more likely than adults to become seriously ill. Finding infection early allows treatment before it becomes active disease.',
+ results:[
+  ['leaf','No risk / negative test','No further action.'],
+  ['sun','Positive test','A positive test usually means TB infection, not active disease. The provider will order a chest X-ray and exam. Children with TB infection (latent TB) are not contagious and can attend school; treatment is usually medicine for a few months.'],
+  ['coral','Active TB suspected','The provider and health department will guide next steps. Follow their instructions about attendance.']
+ ],
+ hs:'Part of the EPSDT schedule used for the 90-day determination, <span class="cite">§1302.42(b)(1)</span>, along with any additional recommendations from your Health Services Advisory Committee based on community health problems.',
+ ages:'Risk assessment at 1, 6, 12, and 24 months and yearly from age 3; testing when risk factors are found (Bright Futures / AAP Red Book). Some states or programs have their own TB requirements.',
+ tips:['If a skin test is placed, help the family plan the 48–72 hour return visit; a test that isn\'t read must be repeated.','Ask risk questions privately and without assumptions about where a family is from.','Children born abroad who received BCG vaccine may have a false-positive skin test; the blood test avoids this.'],
+ en:'The doctor will ask a few questions to see if your child might have been around tuberculosis, or TB. Most children don\'t need a test. If a test is needed, it\'s either a small skin test that must be checked again in 2–3 days, or a blood test. A positive result usually doesn\'t mean your child is sick or contagious, and it can be treated.',
+ es:'El doctor le hará unas preguntas para saber si su niño(a) pudo haber estado cerca de la tuberculosis (TB). La mayoría de los niños no necesitan prueba. Si se necesita, puede ser una prueba pequeña en la piel que hay que revisar otra vez en 2 o 3 días, o una prueba de sangre. Un resultado positivo por lo general no significa que esté enfermo o que contagie, y tiene tratamiento.',
+ faq:[
+  ['My child had the BCG vaccine. Will the test be positive?','It can make the skin test read positive. The blood test is not affected by BCG, so the doctor may choose that one.','Mi niño(a) tiene la vacuna BCG. ¿Saldrá positiva la prueba?','La BCG puede hacer que la prueba de la piel salga positiva. La prueba de sangre no se afecta por la BCG, así que el doctor puede escoger esa.'],
+  ['Positive means my child has TB?','Usually it means TB germs are "sleeping" in the body. The child isn\'t contagious, and medicine can stop it from becoming active.','¿Positivo quiere decir que tiene TB?','Por lo general quiere decir que los gérmenes están "dormidos" en el cuerpo. No contagia, y el medicamento evita que se active.']
+ ]
+},
+{
+ id:'developmental', name:'Developmental & Social-Emotional Screening', icon:'puzzle', color:'sun', types:['Screening'], when:'45 days',
+ keywords:'asq asq-se development milestones speech language behavior autism early intervention part c iep referral',
+ blurb:'A family questionnaire that looks at how a child is learning, moving, talking, and relating to others.',
+ what:'A short, research-based questionnaire (such as the ASQ-3 and ASQ:SE-2) that looks at communication, movement, problem-solving, personal-social skills, and social-emotional development. It flags areas that might need a closer look; it does not diagnose.',
+ how:['Parents answer questions about things their child does, often with staff support; some items are tried out through play.','Takes about 10–20 minutes.','Results are reviewed together with the family.'],
+ why:'The first five years are a time of rapid brain growth. Finding a delay early means children can get support when it helps the most, often for free through early intervention or the school district.',
+ results:[
+  ['leaf','On track','Share the child\'s strengths and activities that build on them; re-screen as scheduled.'],
+  ['sun','Monitor','Share activities to try at home and in class; re-screen in a few months.'],
+  ['coral','Refer for evaluation','With parent consent, refer to early intervention (Part C) for children under 3, or to the local school district (Part B) for ages 3–5. Evaluations are free. Track the referral.']
+ ],
+ hs:'Within 45 calendar days, complete or obtain a current developmental screening, including behavioral, motor, language, social, cognitive, and emotional skills, <span class="cite">§1302.33(a)(1)</span>. Use results with family input to guide next steps, <span class="cite">§1302.33(a)(3)–(4)</span>.',
+ ages:'Developmental screening at 9, 18, and 30 months; autism screening at 18 and 24 months; social-emotional screening at every well-child visit (Bright Futures).',
+ tips:['Screen in the family\'s preferred language with a validated version of the tool.','Lead with strengths. Parents know their child best; ask what they\'ve noticed.','Bilingual children are not delayed because they are learning two languages; make sure screening and referral decisions account for both languages.'],
+ en:'We ask families to fill out a short questionnaire about how your child is playing, talking, moving, and getting along with others. You know your child best, so your answers matter. It helps us plan activities for your child and find out early if any extra support would help. It\'s not a test your child can pass or fail.',
+ es:'Les pedimos a las familias que llenen un cuestionario corto sobre cómo su niño(a) juega, habla, se mueve y se lleva con otros. Usted conoce mejor a su niño(a), así que sus respuestas son importantes. Nos ayuda a planear actividades y a saber a tiempo si algún apoyo extra le ayudaría. No es un examen que se pasa o se reprueba.',
+ faq:[
+  ['Does a referral mean something is wrong?','No. It means a specialist can take a closer look and, if needed, offer free extra support.','¿Si lo refieren quiere decir que algo está mal?','No. Quiere decir que un especialista puede revisar con más detalle y, si hace falta, ofrecer apoyo extra gratis.'],
+  ['We speak Spanish at home. Is that a problem?','No. Learning two languages is a strength. We use the screening in the language you prefer.','En casa hablamos español. ¿Es un problema?','No. Aprender dos idiomas es una fortaleza. Usamos el cuestionario en el idioma que usted prefiera.']
+ ]
+}
+];
+
+/* ---------- STATE ---------- */
+let lang='en', filter='All', current=null, subtab='explain';
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s);
+
+/* ---------- LANGUAGE ---------- */
+document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>{
+  lang=b.dataset.lang;
+  document.querySelectorAll('.lang button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  if(current) renderDetail(current);
+}));
+
+/* ---------- TABS ---------- */
+function showView(v){
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.view===v));
+  document.querySelectorAll('section.view').forEach(s=>s.classList.toggle('active',s.id==='view-'+v));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{showView(b.dataset.view); if(b.dataset.view==='topics') closeDetail();}));
+
+/* ---------- GRID ---------- */
+const FILTERS=['All','Screening','Exam','Lab test','Prevention','45 days','90 days'];
+$('#chips').innerHTML=FILTERS.map(f=>`<button class="chip" type="button" aria-pressed="${f==='All'}" data-f="${f}">${f==='45 days'||f==='90 days'?'Due by '+f:f}</button>`).join('');
+$('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip'); if(!b)return; filter=b.dataset.f; document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c===b)); renderGrid();});
+$('#q').addEventListener('input',renderGrid);
+
+function badge(t,size){const [bg,fg]=C[t.color];return `<span class="badge-ico" style="background:${bg};color:${fg}${size?';width:56px;height:56px':''}">${I[t.icon]}</span>`;}
+function renderGrid(){
+  const q=$('#q').value.trim().toLowerCase();
+  const list=TOPICS.filter(t=>{
+    const fOk = filter==='All' || t.types.includes(filter) || t.when===filter;
+    const hay=(t.name+' '+t.blurb+' '+t.keywords+' '+t.what).toLowerCase();
+    return fOk && (!q || q.split(/\s+/).every(w=>hay.includes(w)));
+  });
+  $('#grid').innerHTML=list.map(t=>`
+    <button class="card" type="button" data-id="${t.id}">
+      <div class="top">${badge(t)}<h3>${t.name}</h3></div>
+      <p>${t.blurb}</p>
+      <div class="tags">${t.types.map(x=>`<span class="tag">${x}</span>`).join('')}<span class="tag when">${t.when==='Ongoing'?'Ongoing':'HS: '+t.when}</span></div>
+    </button>`).join('');
+  $('#empty').hidden=list.length>0;
+}
+$('#grid').addEventListener('click',e=>{const c=e.target.closest('.card'); if(c) openTopic(c.dataset.id);});
+
+/* ---------- DETAIL ---------- */
+function openTopic(id){
+  showView('topics');
+  current=TOPICS.find(t=>t.id===id); subtab='explain';
+  $('#topic-list').style.display='none';
+  $('#detail').classList.add('open');
+  renderDetail(current);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function closeDetail(){current=null;$('#detail').classList.remove('open');$('#topic-list').style.display='';}
+const SUBS=[['explain','What & Why'],['results','Results & Next Steps'],['staff','Staff Tips']];
+function renderDetail(t){
+  const i=TOPICS.indexOf(t), prev=TOPICS[i-1], next=TOPICS[i+1];
+  const L = lang==='es';
+  let body='';
+  if(subtab==='explain'){
+    body=`<h4>What it is</h4><p>${t.what}</p><h4>How it's done</h4><ul>${t.how.map(x=>`<li>${x}</li>`).join('')}</ul><h4>Why it matters</h4><p>${t.why}</p>`;
+  } else if(subtab==='results'){
+    const col={teal:'#0f5f63',leaf:'#3f8a4f',sun:'#f0b23a',coral:'#d9603a',plum:'#6b4c8a'};
+    body=t.results.map(r=>`<div class="result"><span class="dot" style="background:${col[r[0]]}"></span><div><strong>${r[1]}</strong><br>${r[2]}</div></div>`).join('');
+  } else {
+    body=`<ul class="tips">${t.tips.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  }
+  $('#detail').innerHTML=`
+    <button class="back" type="button" id="back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>All screenings &amp; exams</button>
+    <div class="dhead">
+      <div class="left">${badge(t,true)}<div><h2>${t.name}</h2><div class="sub">${t.types.join(' · ')} · ${t.when==='Ongoing'?'Ongoing':'Head Start: within '+t.when}</div></div></div>
+      <div class="actions printgrp" role="group" aria-label="Print parent handout">
+        <span class="plbl">${I.print} Print parent handout:</span>
+        <button class="btn" type="button" data-print="en">English</button>
+        <button class="btn" type="button" data-print="es">Español</button>
+        <button class="btn ghost" type="button" data-print="both" title="English and Spanish, one after the other">Both</button>
+      </div>
+    </div>
+    <div class="dgrid">
+      <div>
+        <div class="panel">
+          <div class="subtabs" role="tablist">${SUBS.map(s=>`<button role="tab" type="button" data-s="${s[0]}" aria-selected="${s[0]===subtab}">${s[1]}</button>`).join('')}</div>
+          ${body}
+        </div>
+        <div class="panel">
+          <h3>${L?'Preguntas comunes de las familias':'Common parent questions'}</h3>
+          ${t.faq.map(f=>`<div class="qa"><div class="q">${L?f[2]:f[0]}</div><div>${L?f[3]:f[1]}</div></div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="panel">
+          <h3>${L?'Cómo explicarlo a los padres':'Say it to parents'}</h3>
+          <div class="say"><span class="lbl">${L?'Español · lenguaje sencillo':'English · plain language'}</span>${L?t.es:t.en}</div>
+          <p style="font-size:.85rem;color:var(--muted);margin-top:10px">${L?'Use the toggle at the top to switch to English.':'Use the toggle at the top to switch to Spanish.'}</p>
+        </div>
+        <div class="panel">
+          <div class="req"><span class="lbl">Head Start requirement</span>${t.hs}</div>
+          <div class="ages"><span class="lbl">Recommended ages</span>${t.ages}</div>
+        </div>
+      </div>
+    </div>
+    <div class="pager">
+      ${prev?`<button class="btn ghost" type="button" data-go="${prev.id}">← ${prev.name.split(' (')[0]}</button>`:'<span></span>'}
+      ${next?`<button class="btn ghost" type="button" data-go="${next.id}">${next.name.split(' (')[0]} →</button>`:'<span></span>'}
+    </div>`;
+  $('#back').onclick=closeDetail;
+  $('#detail').querySelectorAll('[data-print]').forEach(b=>b.onclick=()=>printHandout(t,b.dataset.print));
+  $('#detail').querySelectorAll('.subtabs button').forEach(b=>b.onclick=()=>{subtab=b.dataset.s;renderDetail(t);});
+  $('#detail').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>openTopic(b.dataset.go));
+}
+
+/* ---------- PRINT HANDOUT ---------- */
+function handoutHTML(t,lg){
+  const L=lg==='es', h=HANDOUT[t.id];
+  const how=L?h.how.es:h.how.en, res=L?h.res.es:h.res.en;
+  return `
+    <h1>${L?TITLE_ES[t.id]:t.name}</h1>
+    <div class="hsub">${L?'Información para las familias':'Information for families'}</div>
+    <h2>${L?'¿Qué es y por qué es importante?':'What is it and why does it matter?'}</h2>
+    <div class="say">${L?t.es:t.en}</div>
+    <h2>${L?'¿Cómo se hace?':'How is it done?'}</h2>
+    <ul>${how.map(x=>`<li>${x}</li>`).join('')}</ul>
+    <h2>${L?'¿Qué significan los resultados y qué sigue?':'What do the results mean, and what comes next?'}</h2>
+    ${res.map(r=>`<div class="pres"><strong>${r[0]}:</strong> ${r[1]}</div>`).join('')}
+    <div class="fill">
+      <div><span>${L?'Resultado de su niño(a):':'Your child\'s result:'}</span><i></i></div>
+      <div><span>${L?'Fecha:':'Date:'}</span><i></i></div>
+      <div><span>${L?'Siguiente paso:':'Next step:'}</span><i></i></div>
+    </div>
+    <h2>${L?'Preguntas comunes':'Common questions'}</h2>
+    ${t.faq.map(f=>`<p><strong>${L?f[2]:f[0]}</strong><br>${L?f[3]:f[1]}</p>`).join('')}
+    <h2>${L?'¿Preguntas?':'Questions?'}</h2>
+    <p>${L?'Hable con su especialista de servicios familiares o con el doctor de su niño(a). Estamos aquí para ayudarle.':'Talk with your Family Services Specialist or your child\'s health care provider. We are here to help.'}</p>
+    <p class="small">Centro de la Familia · Head Start / Early Head Start. ${L?'Esta información es general y no sustituye el consejo de un profesional de salud.':'This is general information and does not replace advice from a health care professional.'}</p>`;
+}
+function printHandout(t,mode){
+  const parts = mode==='both' ? ['en','es'] : [mode];
+  $('#print-area').innerHTML = parts.map(lg=>`<div class="handout">${handoutHTML(t,lg)}</div>`).join('');
+  window.print();
+}
+/* Parent-facing "how" and "results" for printed handouts (EN/ES) */
+const HANDOUT={
+ anemia:{how:{en:['A nurse or doctor pokes your child\'s finger (or heel, for babies) to collect a few drops of blood.','It takes about a minute. You can hold your child.','Results are often ready the same day.'],
+  es:['Una enfermera o doctor hace un piquete en el dedo (o en el talón, en bebés) para sacar unas gotitas de sangre.','Toma como un minuto. Usted puede cargar a su niño(a).','Muchas veces los resultados están listos el mismo día.']},
+  res:{en:[['Normal','Your child has enough iron in their blood. Keep offering foods with iron, like meat, beans, eggs, and iron-fortified cereal, along with fruits and vegetables.'],['Low','Your child may need more iron. The doctor may check again, suggest foods with iron, ask you to limit milk to the right amount for your child\'s age, or prescribe iron. WIC can also help.'],['How the doctor decides','For children ages 1 to 5, hemoglobin below about 11 g/dL is usually considered low. In places at high elevation, like much of Utah, Colorado, and Montana, the "normal" number is a little higher, so the doctor will tell you what your child\'s result means.']],
+  es:[['Normal','Su niño(a) tiene suficiente hierro en la sangre. Siga dándole comidas con hierro, como carne, frijoles, huevo y cereal fortificado con hierro, junto con frutas y verduras.'],['Bajo','Su niño(a) puede necesitar más hierro. El doctor puede repetir la prueba, recomendar comidas con hierro, pedirle que limite la leche a la cantidad adecuada para su edad o recetarle hierro. WIC también le puede ayudar.'],['Cómo decide el doctor','En niños de 1 a 5 años, una hemoglobina menor de unos 11 g/dL por lo general se considera baja. En lugares altos, como gran parte de Utah, Colorado y Montana, el número "normal" es un poco más alto, así que el doctor le dirá qué significa el resultado de su niño(a).']]}},
+ dental:{how:{en:['A dental screening is a quick look at the teeth, sometimes done at school.','A dental exam is with a dentist, who checks the teeth, gums, and bite. Small children may lie back on your lap.','The dentist may paint fluoride varnish on the teeth. It takes a minute and doesn\'t hurt.'],
+  es:['La revisión dental es una mirada rápida a los dientes; a veces se hace en la escuela.','El examen dental es con un dentista, que revisa los dientes, las encías y la mordida. Los niños pequeños se pueden recostar en sus piernas.','El dentista puede pintar los dientes con barniz de fluoruro. Toma un minuto y no duele.']},
+  res:{en:[['No problems','Keep brushing twice a day with fluoride toothpaste and go back for checkups as the dentist recommends (often every 6 months).'],['Treatment needed','Your child needs dental care, such as a filling. We can help you find a dentist who takes your insurance and make the appointment.'],['Urgent','If your child has tooth pain, a swollen face, or swollen gums, call the dentist right away.']],
+  es:[['Sin problemas','Siga cepillando dos veces al día con pasta con fluoruro y regrese a sus chequeos como recomiende el dentista (muchas veces cada 6 meses).'],['Necesita tratamiento','Su niño(a) necesita atención dental, como un empaste. Le podemos ayudar a encontrar un dentista que acepte su seguro y a hacer la cita.'],['Urgente','Si su niño(a) tiene dolor de muela, la cara hinchada o las encías hinchadas, llame al dentista de inmediato.']]}},
+ growth:{how:{en:['Your child takes off shoes and stands up straight (babies lie down).','We measure height and weight. It takes a minute and doesn\'t hurt.','The numbers go on a growth chart so we can see your child\'s pattern over time.'],
+  es:['Su niño(a) se quita los zapatos y se para derecho (los bebés se acuestan).','Medimos la estatura y el peso. Toma un minuto y no duele.','Los números se ponen en una gráfica de crecimiento para ver el patrón de su niño(a) con el tiempo.']},
+  res:{en:[['Growing steadily','Your child is following their own growth curve. Keep up family meals, active play, and good sleep.'],['Needs a closer look','If your child\'s growth changes a lot or is outside the usual range, the doctor may check more often and talk with you about eating, sleep, and activity. We can share ideas and resources too.']],
+  es:[['Crece de forma estable','Su niño(a) va siguiendo su propia curva de crecimiento. Sigan con las comidas en familia, el juego activo y el buen descanso.'],['Hay que revisar más','Si el crecimiento cambia mucho o está fuera de lo usual, el doctor puede revisarlo más seguido y hablar con usted sobre la comida, el sueño y la actividad. Nosotros también le podemos dar ideas y recursos.']]}},
+ hearing:{how:{en:['A small, soft tip is placed in the ear for a few seconds, or your child wears headphones and plays a listening game.','It takes a few minutes and doesn\'t hurt.'],
+  es:['Se coloca una puntita suave en el oído por unos segundos, o su niño(a) se pone audífonos y juega un juego de escuchar.','Toma unos minutos y no duele.']},
+  res:{en:[['Pass','Your child\'s hearing screening looks good. Tell us or the doctor if you ever have concerns about hearing or talking.'],['Check again','This does not mean your child can\'t hear. Colds, ear fluid, or wax can affect the result. We will check again in a few weeks.'],['Referral','If there is still a concern, the doctor will look in your child\'s ears and may send you to a hearing specialist (audiologist). We can help with the appointment.']],
+  es:[['Pasó','La revisión del oído salió bien. Avísenos a nosotros o al doctor si tiene dudas sobre cómo oye o habla su niño(a).'],['Revisar otra vez','Esto no quiere decir que su niño(a) no oye. Un resfriado, líquido o cera en el oído pueden afectar el resultado. Volveremos a revisar en unas semanas.'],['Referencia','Si sigue la duda, el doctor revisará los oídos y tal vez le envíe con un especialista en audición (audiólogo). Le podemos ayudar con la cita.']]}},
+ vision:{how:{en:['Your child looks at a special camera for a few seconds, or points to pictures on a chart.','No eye drops, nothing touches the eyes, and it doesn\'t hurt.'],
+  es:['Su niño(a) mira una cámara especial por unos segundos, o señala dibujos en una tabla.','No se usan gotas, nada toca los ojos y no duele.']},
+  res:{en:[['Pass','Your child\'s vision screening looks good. Tell us if you notice squinting, eye rubbing, head tilting, or an eye that turns.'],['Try again','Young children sometimes can\'t finish the screening. We will try again another day.'],['Referral','Your child should see an eye doctor for a full exam. This is not a diagnosis. We can help you find an eye doctor and, if glasses are needed, help your child get used to them.']],
+  es:[['Pasó','La revisión de la vista salió bien. Avísenos si nota que su niño(a) entrecierra los ojos, se los talla, ladea la cabeza o tiene un ojo que se desvía.'],['Intentar otra vez','A veces los niños pequeños no pueden terminar la revisión. Lo intentaremos otro día.'],['Referencia','Su niño(a) debe ver a un doctor de los ojos para un examen completo. Esto no es un diagnóstico. Le podemos ayudar a encontrar un doctor de los ojos y, si necesita lentes, a que se acostumbre a usarlos.']]}},
+ immunizations:{how:{en:['Vaccines are given as shots (and one is given as drops by mouth for babies) at regular checkups.','Your child may have a sore arm or leg, be fussy, or have a low fever for a day or two.'],
+  es:['Las vacunas se ponen con inyección (y una se da en gotitas por la boca a los bebés) en los chequeos regulares.','Su niño(a) puede tener el brazo o la pierna adolorida, estar inquieto(a) o tener un poco de fiebre por uno o dos días.']},
+  res:{en:[['Up to date','Your child has the vaccines required for their age. Please give us a copy of the record when your child gets new ones.'],['Missing vaccines','Your child can catch up. Your child\'s doctor or the health department can help. Vaccines are free for eligible children through the Vaccines for Children program.'],['Exemptions','Each state has its own rules. Ask us if you have questions.']],
+  es:[['Al día','Su niño(a) tiene las vacunas que se piden para su edad. Por favor denos una copia de la cartilla cuando le pongan vacunas nuevas.'],['Faltan vacunas','Su niño(a) se puede poner al día. El doctor o el departamento de salud le pueden ayudar. Las vacunas son gratis para los niños que califican en el programa Vacunas para Niños (VFC).'],['Exenciones','Cada estado tiene sus propias reglas. Pregúntenos si tiene dudas.']]}},
+ lead:{how:{en:['Usually a quick finger poke to collect a few drops of blood.','If the result is high, the doctor may take blood from the arm to confirm it.'],
+  es:['Por lo general es un piquete rápido en el dedo para sacar unas gotitas de sangre.','Si el resultado sale alto, el doctor puede sacar sangre del brazo para confirmarlo.']},
+  res:{en:[['Below 3.5 µg/dL','This is below the level that needs follow-up. Keep washing hands and toys and wet-cleaning dust to help prevent lead exposure.'],['3.5 µg/dL or higher','The doctor will confirm the result and check again over time. They will help you find where the lead may come from (old paint, soil, some spices, candies, pottery, or home remedies) and recommend foods with iron, calcium, and vitamin C. Your health department may offer a home visit.'],['Very high','Your child needs prompt follow-up with the doctor. We will help you.']],
+  es:[['Menos de 3.5 µg/dL','Está por debajo del nivel que necesita seguimiento. Siga lavando manos y juguetes y limpiando el polvo con trapo húmedo para ayudar a prevenir el plomo.'],['3.5 µg/dL o más','El doctor confirmará el resultado y lo volverá a revisar con el tiempo. Le ayudará a encontrar de dónde puede venir el plomo (pintura vieja, tierra, algunas especias, dulces, ollas de barro o remedios caseros) y le recomendará comidas con hierro, calcio y vitamina C. El departamento de salud puede ofrecer una visita a su casa.'],['Muy alto','Su niño(a) necesita seguimiento pronto con el doctor. Nosotros le ayudaremos.']]}},
+ physical:{how:{en:['The doctor checks growth, eyes, ears, mouth, heart, lungs, belly, skin, and development.','Your child may get screenings, lab tests, or vaccines that are due.','Bring your child\'s shot record and any Head Start forms.'],
+  es:['El doctor revisa el crecimiento, los ojos, los oídos, la boca, el corazón, los pulmones, la pancita, la piel y el desarrollo.','Su niño(a) puede recibir las pruebas, exámenes de laboratorio o vacunas que le toquen.','Lleve la cartilla de vacunas y las formas de Head Start.']},
+  res:{en:[['All up to date','Give us a copy of the exam form so we can keep your child\'s record complete.'],['Follow-up needed','If the doctor finds something to check further, we can help with referrals and appointments. If your child has a health condition, we will make a health plan together for school.'],['No doctor or insurance','We can help you find a regular doctor and apply for health insurance.']],
+  es:[['Todo al día','Denos una copia de la forma del examen para tener completo el expediente de su niño(a).'],['Necesita seguimiento','Si el doctor encuentra algo que revisar más, le podemos ayudar con referencias y citas. Si su niño(a) tiene una condición de salud, haremos juntos un plan de salud para la escuela.'],['Sin doctor o seguro','Le podemos ayudar a encontrar un doctor regular y a solicitar seguro médico.']]}},
+ nutrition:{how:{en:['We talk with you, or ask you to fill out a short form, about what your child eats and drinks.','We look at your child\'s growth and iron results from the checkup.','If your child has a food allergy or special diet, the doctor fills out a form.'],
+  es:['Platicamos con usted, o le pedimos llenar una forma corta, sobre lo que su niño(a) come y toma.','Revisamos el crecimiento y el resultado de hierro del chequeo.','Si su niño(a) tiene alergia a algún alimento o una dieta especial, el doctor llena una forma.']},
+  res:{en:[['No special needs','Your child will enjoy our regular meals. We\'re happy to share ideas for healthy meals at home.'],['Allergy or medical diet','With the doctor\'s form, our kitchen will make the needed changes to keep your child safe.'],['Other preferences','You can ask in writing for a non-dairy milk that is as nutritious as milk. Ask us about other preferences.']],
+  es:[['Sin necesidades especiales','Su niño(a) disfrutará nuestras comidas regulares. Con gusto le compartimos ideas para comidas sanas en casa.'],['Alergia o dieta médica','Con la forma del doctor, nuestra cocina hará los cambios necesarios para proteger a su niño(a).'],['Otras preferencias','Puede pedir por escrito una leche sin lácteos que sea tan nutritiva como la leche. Pregúntenos sobre otras preferencias.']]}},
+ tb:{how:{en:['The doctor asks a few questions. Most children don\'t need a test.','Skin test: a tiny shot under the skin of the arm. You must go back in 2–3 days to have it checked.','Blood test: one blood draw, no return visit.'],
+  es:['El doctor hace unas preguntas. La mayoría de los niños no necesitan prueba.','Prueba de la piel: una inyección muy pequeña bajo la piel del brazo. Debe regresar en 2 o 3 días para que la revisen.','Prueba de sangre: se saca sangre una sola vez, sin tener que regresar.']},
+  res:{en:[['No risk or negative','No further action is needed.'],['Positive','This usually means TB germs are "sleeping" in the body. Your child is not sick or contagious and can come to school. The doctor will do a chest X-ray and may give medicine for a few months.']],
+  es:[['Sin riesgo o negativo','No se necesita hacer nada más.'],['Positivo','Por lo general quiere decir que los gérmenes de TB están "dormidos" en el cuerpo. Su niño(a) no está enfermo(a), no contagia y puede venir a la escuela. El doctor hará una radiografía del pecho y puede darle medicamento por unos meses.']]}},
+ developmental:{how:{en:['You answer questions about things your child does, like talking, playing, and moving. Staff can help.','Some activities may be tried through play.','It takes about 10–20 minutes.'],
+  es:['Usted contesta preguntas sobre lo que hace su niño(a), como hablar, jugar y moverse. El personal le puede ayudar.','Algunas actividades se pueden probar jugando.','Toma de 10 a 20 minutos.']},
+  res:{en:[['On track','We\'ll share your child\'s strengths and fun activities to keep learning.'],['Keep an eye on','We\'ll share activities for home and school and check again in a few months.'],['Referral','With your permission, a specialist can take a closer look. The evaluation is free, and you decide every step.']],
+  es:[['Va bien','Le compartiremos las fortalezas de su niño(a) y actividades divertidas para seguir aprendiendo.'],['Hay que observar','Le daremos actividades para la casa y la escuela y volveremos a revisar en unos meses.'],['Referencia','Con su permiso, un especialista puede revisar con más detalle. La evaluación es gratis y usted decide cada paso.']]}}
+};
+const TITLE_ES={anemia:'Prueba de anemia (hemoglobina / hematocrito)',dental:'Revisión y examen dental',growth:'Crecimiento: estatura, peso e IMC',hearing:'Revisión del oído',vision:'Revisión de la vista',immunizations:'Vacunas',lead:'Prueba de plomo',physical:'Examen físico (chequeo del niño sano)',nutrition:'Evaluación de nutrición',tb:'Tuberculosis (TB): preguntas y pruebas',developmental:'Revisión del desarrollo y socioemocional'};
+
+/* ---------- AGE MATRIX ---------- */
+const AGES=['9 mo','12 mo','15 mo','18 mo','24 mo','30 mo','3 yr','4 yr','5 yr'];
+const ROWS=[
+ ['Exams & measurements'],
+ ['Physical exam','physical','U U U U U U U U U'],
+ ['Length/height & weight','growth','U U U U U U U U U'],
+ ['Head circumference','growth','U U U U U - - - -'],
+ ['Weight-for-length','growth','U U U U - - - - -'],
+ ['Body mass index (BMI)','growth','- - - - U U U U U'],
+ ['Blood pressure','physical','R R R R R R U U U'],
+ ['Sensory screening'],
+ ['Vision','vision','R R R R R R U U U'],
+ ['Hearing','hearing','R R R R R R R U U'],
+ ['Development & behavior'],
+ ['Developmental screening','developmental','U - - U - U - - -'],
+ ['Autism screening','developmental','- - - U U - - - -'],
+ ['Social-emotional screening','developmental','U U U U U U U U U'],
+ ['Procedures & lab tests'],
+ ['Immunizations (review & update)','immunizations','U U U U U U U U U'],
+ ['Anemia (hemoglobin/hematocrit)','anemia','- U R R R R R R R'],
+ ['Lead','lead','R UR - R UR - R R R'],
+ ['Tuberculosis','tb','- R - - R - R R R'],
+ ['Oral health'],
+ ['Oral health risk / dental home check','dental','U R - R R R R R R'],
+ ['Fluoride varnish (every 3–6 months)','dental','U U U U U U U U U'],
+ ['Fluoride supplement (if water is low in fluoride)','dental','R R R R R R R R R']
+];
+function renderMatrix(){
+  let h='<thead><tr><th class="row" style="background:var(--teal);color:#fff">Service</th>'+AGES.map(a=>`<th>${a}</th>`).join('')+'</tr></thead><tbody>';
+  ROWS.forEach(r=>{
+    if(r.length===1){h+=`<tr class="grp"><th colspan="${AGES.length+1}">${r[0]}</th></tr>`;return;}
+    const cells=r[2].split(' ');
+    h+=`<tr><th class="row" scope="row"><button type="button" data-go="${r[1]}">${r[0]}</button></th>`+cells.map((c,i)=>{
+      const lbl={U:'Done for every child',R:'Risk assessment',UR:'Universal for Medicaid / high-risk, otherwise risk-based','-':'Not scheduled'}[c];
+      return `<td title="${r[0]} at ${AGES[i]}: ${lbl}">${c==='-'?'<span aria-label="'+lbl+'">—</span>':`<i class="mk ${c}" role="img" aria-label="${lbl}"></i>`}</td>`;
+    }).join('')+'</tr>';
+  });
+  $('#mtx').innerHTML=h+'</tbody>';
+  $('#mtx').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>openTopic(b.dataset.go));
+}
+
+/* ---------- HEAD START TIMELINE ---------- */
+const TL=[
+ ['Within 30 days','Source of health care and insurance','Talk with the parent to find out whether the child has an ongoing source of health care (not just urgent care or the ER) and health insurance. If not, help the family get both as quickly as possible.','§1302.42(a)(1)–(2)',['physical']],
+ ['Within 45 days','Vision, hearing, and developmental screening','Obtain or perform evidence-based vision and hearing screenings. Complete or obtain a current developmental screening covering behavioral, motor, language, social, cognitive, and emotional skills.','§1302.42(b)(2); §1302.33(a)(1)',['vision','hearing','developmental']],
+ ['Within 90 days','Up-to-date health status','Get determinations from health and oral health professionals on whether the child is up to date on the state EPSDT well-child and dental schedules, CDC immunization recommendations, and any added local recommendations. Help parents arrange care to catch up.','§1302.42(b)(1)',['physical','dental','immunizations','anemia','lead','tb','growth']],
+ ['From enrollment on','Nutrition needs','Identify each child\'s nutritional health needs using health records, family and staff concerns, special diets, food allergies, and community nutrition issues.','§1302.42(b)(4); §1302.44',['nutrition','growth','anemia']],
+ ['Ongoing','Keep children on schedule','Help parents keep up with well-child and oral health visits; watch for new or recurring concerns; facilitate preventive oral health care, including topical fluoride.','§1302.42(c)',['physical','dental']],
+ ['As needed','Extended follow-up','Facilitate further testing, evaluation, and treatment for health problems or delays (for example, elevated lead or abnormal hearing or vision results). Track referrals and monitor follow-up plans; help families get prescribed medicines or equipment.','§1302.42(d)',['lead','hearing','vision']]
+];
+$('#tl').innerHTML=TL.map(x=>`<div class="tl-item panel"><span class="when">${x[0]}</span><h3>${x[1]}</h3><p>${x[2]}</p><span class="cite">45 CFR ${x[3]}</span><div class="linkchips">${x[4].map(id=>`<button type="button" data-go="${id}">${TOPICS.find(t=>t.id===id).name.split(' (')[0]}</button>`).join('')}</div></div>`).join('');
+$('#tl').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>openTopic(b.dataset.go));
+
+/* ---------- QUIZ ---------- */
+const QUIZ=[
+ {q:'A child\'s finger-prick lead result is 6 µg/dL. What is the best first explanation to the parent?',o:['Your child has lead poisoning and needs treatment.','The level is above the reference value, so the doctor will confirm it with a blood draw from a vein and look for sources.','This is normal for children in older homes.','No follow-up is needed below 10 µg/dL.'],a:1,e:'CDC\'s blood lead reference value is 3.5 µg/dL. A high finger-prick result should be confirmed with a venous sample, because lead on the skin can cause a false high.'},
+ {q:'Within how many days must Head Start obtain or perform vision and hearing screenings under the current Performance Standards?',o:['30 days','45 days','90 days','By the end of the school year'],a:1,e:'45 calendar days after the child first attends (§1302.42(b)(2)). Programs operating 90 days or less have 30 days.'},
+ {q:'A parent says, "My child talks fine, so the hearing screening isn\'t needed." Which response fits best?',o:['"It\'s required, so you have to."','"Some hearing loss is mild or in one ear, and children work around it. Finding it early protects language and learning."','"Your child probably has an ear infection."','"We can skip it this year."'],a:1,e:'Connect the screening to what the parent cares about and explain why a child who seems fine can still benefit.'},
+ {q:'A child has a positive TB skin test. Which statement is accurate?',o:['The child must stay home until treated.','The child has active, contagious TB.','A positive test usually means TB infection; the provider will check further, and children with latent TB are not contagious.','The test should be ignored if the child looks healthy.'],a:2,e:'A positive test usually indicates infection, not active disease. A chest X-ray and exam follow. Latent TB is not contagious and is treatable.'},
+ {q:'A family wants their child served soy milk because they prefer not to drink cow\'s milk (no medical reason). Under CACFP rules, what\'s needed?',o:['A medical statement from a doctor','A written request from the parent, if the substitute is nutritionally equivalent to milk','Nothing; staff can switch it','It is not allowed'],a:1,e:'For non-disability reasons, a parent may request in writing a non-dairy beverage that is nutritionally equivalent to milk. Disability-related changes need a medical statement.'},
+ {q:'What does "up to date" mean for the 90-day health status determination?',o:['The child had a physical sometime in the past year.','The parent says the child is healthy.','A health professional determines the child is current on the state EPSDT schedule for their age, including dental and immunizations.','The child has health insurance.'],a:2,e:'§1302.42(b)(1)(i) requires determinations from health and oral health care professionals based on the state EPSDT schedules and CDC immunization recommendations.'}
+];
+let qi=0,score=0,answered=false;
+function renderQuiz(){
+  const box=$('#quiz');
+  if(qi>=QUIZ.length){
+    box.innerHTML=`<h3>Nice work!</h3><p style="font-size:1.2rem">You got <strong>${score} of ${QUIZ.length}</strong> correct.</p><p>${score===QUIZ.length?'Perfect score. You\'re ready to coach others.':'Review the topics you missed, then try again.'}</p><button class="btn" type="button" id="again">Try again</button>`;
+    $('#again').onclick=()=>{qi=0;score=0;renderQuiz();};return;
+  }
+  const it=QUIZ[qi]; answered=false;
+  box.innerHTML=`<div class="progress"><div style="width:${qi/QUIZ.length*100}%"></div></div>
+    <div style="font-size:.85rem;color:var(--muted);margin-bottom:6px">Question ${qi+1} of ${QUIZ.length}</div>
+    <div class="quiz-q">${it.q}</div>
+    <div class="opts">${it.o.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${o}</button>`).join('')}</div>
+    <div class="explain" id="exp"></div>
+    <div style="margin-top:14px;text-align:right"><button class="btn" type="button" id="nextQ" hidden>Next →</button></div>`;
+  box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(answered)return; answered=true;
+    const i=+b.dataset.i;
+    if(i===it.a)score++;
+    box.querySelectorAll('.opt').forEach((x,j)=>{if(j===it.a)x.classList.add('right');else if(j===i)x.classList.add('wrong');});
+    const ex=$('#exp'); ex.style.display='block'; ex.innerHTML=`<strong>${i===it.a?'Correct.':'Not quite.'}</strong> ${it.e}`;
+    $('#nextQ').hidden=false;
+  });
+  $('#nextQ').onclick=()=>{qi++;renderQuiz();};
+}
+
+/* ---------- SOURCES ---------- */
+const SRC=[
+ ['Head Start Program Performance Standards, 45 CFR §1302.42 Child health status and care','https://headstart.gov/policy/45-cfr-chap-xiii/1302-42-child-health-status-care'],
+ ['45 CFR §1302.33 Child screenings and assessments','https://headstart.gov/policy/45-cfr-chap-xiii/1302-33-child-screenings-assessments'],
+ ['45 CFR §1302.44 Child nutrition','https://headstart.gov/policy/45-cfr-chap-xiii/1302-44-child-nutrition'],
+ ['Head Start Health Services Year-at-a-Glance (Health Manager Orientation Guide)','https://headstart.gov/health-services-management/health-manager-orientation-guide/head-start-health-services-year-glance'],
+ ['HeadStart.gov: Vision and Hearing Screenings','https://www.headstart.gov/physical-health/health-manager-orientation-guide/vision-hearing-screenings'],
+ ['HeadStart.gov: Oral Health Status','https://headstart.gov/oral-health/health-manager-orientation-guide/oral-health-status'],
+ ['HeadStart.gov: Promoting the Age 1 Dental Visit','https://www.headstart.gov/oral-health/brush-oral-health/promoting-age-1-dental-visit'],
+ ['HeadStart.gov: Identifying Children\'s Nutritional Needs','https://headstart.gov/nutrition/health-manager-orientation-guide/identifying-childrens-nutritional-needs'],
+ ['Federal Register (Aug. 7, 2026): Reducing Federal Burden for Head Start Programs (NPRM)','https://www.federalregister.gov/documents/2026/08/07/2026-16134/reducing-federal-burden-for-head-start-programs'],
+ ['First Five Years Fund: FAQ on the 2026 Head Start NPRM','https://www.ffyf.org/2026/08/19/faq-2026-head-start-nprm/'],
+ ['AAP / Bright Futures Periodicity Schedule','https://www.aap.org/en/practice-management/care-delivery-approaches/periodicity-schedule/'],
+ ['Bright Futures in Practice: Nutrition — Iron-Deficiency Anemia (CDC hemoglobin/hematocrit cut-offs and altitude adjustments)','https://www.brightfutures.org/wellchildcare/04_labs/resources/BFN_Anemia.pdf'],
+ ['CDC: Blood Lead Reference Value (3.5 µg/dL)','https://www.cdc.gov/lead-prevention/php/news-features/updates-blood-lead-reference-value.html'],
+ ['Medicaid.gov: EPSDT Lead Screening requirements','https://www.medicaid.gov/medicaid/benefits/early-and-periodic-screening-diagnostic-and-treatment/lead-screening'],
+ ['CDC: Child and Adolescent Immunization Schedule (currently posted)','https://www.cdc.gov/vaccines/hcp/imz-schedules/downloads/child/0-18yrs-child-combined-schedule.pdf'],
+ ['AAP: Recommended Childhood and Adolescent Immunization Schedule, 2026','https://publications.aap.org/pediatrics/article/157/3/e2025075754/206175/Recommended-Childhood-and-Adolescent-Immunization'],
+ ['Congressional Research Service: Changes to CDC Vaccine Recommendations in 2025 and 2026','https://www.congress.gov/crs-product/IN12684'],
+ ['Utah News Dispatch: Utah\'s fluoride ban one year later (May 2026)','https://utahnewsdispatch.com/?p=17209']
+];
+$('#src').innerHTML=SRC.map(s=>`<li><a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a></li>`).join('');
+
+/* ---------- INIT ---------- */
+renderGrid(); renderMatrix(); renderQuiz();
+// deep link: page.html#lead opens a topic
+if(location.hash && TOPICS.some(t=>t.id===location.hash.slice(1))) openTopic(location.hash.slice(1));
+</script>
+</body>
+</html>
